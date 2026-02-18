@@ -7,6 +7,7 @@ import (
 
 	httprepo "github.com/Vedant2104/inventory-system/internals/adapters/http"
 	maprepo "github.com/Vedant2104/inventory-system/internals/adapters/repository/map"
+	"github.com/Vedant2104/inventory-system/internals/infrastructure/logger"
 	"github.com/Vedant2104/inventory-system/internals/service"
 	"github.com/go-chi/chi/v5"
 )
@@ -22,7 +23,9 @@ func main() {
 
 	router := chi.NewRouter()
 
-	router.Mount("/", httprepo.RegisterRoutes(ProductHandler))
+	logger := logger.GetLogger()
+
+	router.Mount("/", httprepo.RegisterRoutes(ProductHandler, logger))
 
 	log.Println("Server Running at port", port)
 
