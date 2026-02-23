@@ -43,14 +43,14 @@ func (s *ProductService) DeleteProduct(ctx context.Context, ID string) error {
 	return s.repo.DeleteProduct(ctx, ID)
 }
 
-func (s *ProductService) UpdateProduct(ctx context.Context, id string, name string, description string, category string, price int, brand string, quantity int) (*domain.Product, error) {
+func (s *ProductService) UpdateProduct(ctx context.Context, id string, name *string, description *string, category *string, price *int, brand *string, quantity *int) (*domain.Product, error) {
 
 	existing_product, _ := s.repo.GetProductById(ctx, id)
 	if existing_product == nil {
 		return nil, errors.New("product not found")
 	}
 	copy_product := *existing_product
-	err := copy_product.UpdateProductValidation(&name, &description, &category, &price, &brand, &quantity)
+	err := copy_product.UpdateProductValidation(name, description, category, price, brand, quantity)
 	if err != nil {
 		return nil, err
 	}

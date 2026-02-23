@@ -16,13 +16,13 @@ var (
 )
 
 type Product struct {
-	ID          string
-	Name        string
-	Description string
-	Category    string
-	Price       int
-	Brand       string
-	Quantity    int
+	ID          string `json:"_id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Category    string `json:"category"`
+	Price       int    `json:"price"`
+	Brand       string `json:"brand"`
+	Quantity    int    `json:"quantity"`
 }
 
 func NewProduct(Name string, Description string, Category string, Price int, Brand string, Quantity int) (*Product, error) {

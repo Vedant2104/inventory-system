@@ -3,20 +3,19 @@ package httprepo
 import (
 	"net/http"
 
-	"github.com/go-chi/chi/v5"
 	"github.com/rs/zerolog"
 )
 
-func RegisterRoutes(handler *ProductHandler, logger zerolog.Logger) http.Handler {
-	r := chi.NewRouter()
-	r.Use(RequestLogger(logger))
-	r.Route("/product", func(r chi.Router) {
-		r.Post("/", handler.CreateProduct)
-		r.Get("/", handler.GetAllProduct)
-		r.Get("/{id}", handler.GetProductById)
-		r.Delete("/{id}", handler.DeleteProduct)
-		r.Patch("/{id}", handler.UpdateProduct)
-	})
+func RegisterProductHandler(mux *http.ServeMux, handler *ProductHandler, logger zerolog.Logger) *http.Handler {
 
-	return r
+	mux.HandleFunc("GET /product", handler.GetAllProduct)
+	mux.HandleFunc("POST /product", handler.CreateProduct)
+	mux.HandleFunc("GET /product/{id}", handler.GetProductById)
+	mux.HandleFunc("PATCH /product/{id}", handler.UpdateProduct)
+	mux.HandleFunc("DELETE /product/{id}", handler.DeleteProduct)
+
+	middleware := RequestLogger(logger)
+
+	wrappedMux := middleware(mux)
+	return &wrappedMux
 }

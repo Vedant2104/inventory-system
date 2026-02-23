@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/Vedant2104/inventory-system/internals/service"
-	"github.com/go-chi/chi/v5"
 )
 
 type ProductHandler struct {
@@ -68,7 +67,7 @@ func (h *ProductHandler) GetProductById(w http.ResponseWriter, r *http.Request) 
 	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
 	defer cancel()
 
-	id := chi.URLParam(r, "id")
+	id := r.PathValue("id")
 
 	if id == "" {
 		http.Error(w, "Invalid Id", http.StatusBadRequest)
@@ -88,7 +87,7 @@ func (h *ProductHandler) DeleteProduct(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
 	defer cancel()
 
-	id := chi.URLParam(r, "id")
+	id := r.PathValue("id")
 
 	if id == "" {
 		http.Error(w, "Invalid Id", http.StatusBadRequest)
@@ -109,19 +108,19 @@ func (h *ProductHandler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 
 	defer cancel()
 
-	id := chi.URLParam(r, "id")
+	id := r.PathValue("id")
 
 	if id == "" {
 		http.Error(w, "Invalid Id", http.StatusBadRequest)
 		return
 	}
 	var input struct {
-		Name        string `json:"name"`
-		Description string `json:"description"`
-		Category    string `json:"category"`
-		Price       int    `json:"price"`
-		Brand       string `json:"brand"`
-		Quantity    int    `json:"quantity"`
+		Name        *string `json:"name"`
+		Description *string `json:"description"`
+		Category    *string `json:"category"`
+		Price       *int    `json:"price"`
+		Brand       *string `json:"brand"`
+		Quantity    *int    `json:"quantity"`
 	}
 
 	err := json.NewDecoder(r.Body).Decode(&input)
