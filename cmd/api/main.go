@@ -38,22 +38,31 @@ func main() {
 		log.Fatal("Failed to connect to mongodb", err)
 	}
 	db := client.Database("inventory")
-	collection := db.Collection("products")
-	// productRepo := maprepo.NewProductRepository()
-	productRepo := mongorepo.NewProductRepository(collection)
-	productService := service.NewProductService(productRepo)
+	product_collection := db.Collection("products")
+	category_collection := db.Collection("product_categories")
 
-	ProductHandler := httprepo.NewProductHandler(productService)
+	categoryRepo := mongorepo.NewProductCategoryRepository(category_collection)
+	categoryService := service.NewProductCategoryService(categoryRepo)
+	categoryHandler := httprepo.NewProductCategoryHandler(categoryService)
+	
+	
+	// productRepo := maprepo.NewProductRepository()
+	productRepo := mongorepo.NewProductRepository(product_collection)
+	productService := service.NewProductService(productRepo , categoryService)
+	productHandler := httprepo.NewProductHandler(productService)
 
 	// router := chi.NewRouter()
-	router := http.ServeMux{}
+	router := http.NewServeMux()
 	logger := logger.GetLogger()
 
 	// router.Mount("/", httprepo.RegisterRoutes(ProductHandler, logger))
-	productHandler := httprepo.RegisterProductHandler(&router, ProductHandler, logger)
+	httprepo.RegisterProductHandler(router, productHandler)
+	httprepo.RegisterProductCategoryHandler(router, categoryHandler)
 	log.Println("Server Running at port", port)
 
-	if err := http.ListenAndServe(":"+port, *productHandler); err != nil {
+	middleware := httprepo.RequestLogger(logger)
+	handler := middleware(router)
+	if err := http.ListenAndServe(":"+port, handler); err != nil {
 		log.Fatal(err)
 	}
 

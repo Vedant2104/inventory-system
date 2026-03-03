@@ -28,7 +28,7 @@ type mongoProduct struct {
 	Category    string        `bson:"category"`
 	Price       int           `bson:"price"`
 	Brand       string        `bson:"brand"`
-	Quantity    int           `bson:"s"`
+	Quantity    int           `bson:"quantity"`
 }
 
 func (p *ProductRepository) CreateProduct(ctx context.Context, product *domain.Product) (*domain.Product, error) {
@@ -160,4 +160,26 @@ func (p *ProductRepository) UpdateProduct(ctx context.Context, product *domain.P
 		Brand:       updatedProduct.Brand,
 		Quantity:    updatedProduct.Quantity,
 	}, nil
+}
+
+func (p *ProductRepository) BulkCreate(ctx context.Context, products *[]domain.Product) error {
+	var docs []mongoProduct
+	for _, product := range *products {
+		var doc mongoProduct = mongoProduct{
+			Name:        product.Name,
+			Description: product.Description,
+			Category:    product.Category,
+			Price:       product.Price,
+			Brand:       product.Brand,
+			Quantity:    product.Quantity,
+		}
+		docs = append(docs, doc)
+	}
+
+	_, err := p.collection.InsertMany(ctx, docs)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

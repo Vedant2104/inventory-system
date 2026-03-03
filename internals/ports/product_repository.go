@@ -12,4 +12,5 @@ type ProductRepository interface {
 	GetProductById(ctx context.Context, ID string) (*domain.Product, error)
 	UpdateProduct(ctx context.Context, product *domain.Product) (*domain.Product, error)
 	DeleteProduct(ctx context.Context, ID string) error
+	BulkCreate(ctx context.Context , products *[]domain.Product) error
 }

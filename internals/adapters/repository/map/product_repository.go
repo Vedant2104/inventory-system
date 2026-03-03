@@ -58,3 +58,7 @@ func (p *ProductRepository) DeleteProduct(ctx context.Context, Id string) error 
 	delete(p.products, Id)
 	return nil
 }
+
+func (p *ProductRepository) BulkCreate(ctx context.Context, products *[]domain.Product) error {
+	return nil
+}
