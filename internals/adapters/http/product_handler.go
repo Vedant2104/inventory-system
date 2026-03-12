@@ -53,8 +53,8 @@ func (h *ProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 func (h *ProductHandler) GetAllProduct(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
 	defer cancel()
-
-	users, err := h.service.GetAllProduct(ctx)
+	category := r.URL.Query().Get("category")
+	users, err := h.service.GetAllProduct(ctx, category)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -102,7 +102,6 @@ func (h *ProductHandler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 
 	id := r.PathValue("id")
 
-
 	var input struct {
 		Name        *string `json:"name"`
 		Description *string `json:"description"`
@@ -127,30 +126,29 @@ func (h *ProductHandler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(updatedProduct)
 }
 
-
 func (h *ProductHandler) BulkCreateFromCSV(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
 	defer cancel()
 
 	r.ParseMultipartForm(10 << 20)
 
-	file,_ , err := r.FormFile("file")
+	file, _, err := r.FormFile("file")
 
-	if err != nil{
+	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	defer file.Close()
 	reader := csv.NewReader(file)
 
-	records , err := reader.ReadAll()
+	records, err := reader.ReadAll()
 
-	if err!= nil{
+	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if err = h.service.BulkCreate(ctx , records); err != nil{
+	if err = h.service.BulkCreate(ctx, records); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}

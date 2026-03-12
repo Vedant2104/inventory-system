@@ -27,7 +27,7 @@ func (p *ProductRepository) CreateProduct(ctx context.Context, product *domain.P
 	return product, nil
 }
 
-func (p *ProductRepository) GetAllProduct(ctx context.Context) ([]*domain.Product, error) {
+func (p *ProductRepository) GetAllProduct(ctx context.Context ,category string) ([]*domain.Product, error) {
 	products := []*domain.Product{}
 
 	for _, product := range p.products {
@@ -46,10 +46,10 @@ func (p *ProductRepository) GetProductById(ctx context.Context, Id string) (*dom
 	return &product, nil
 }
 
-func (p *ProductRepository) UpdateProduct(ctx context.Context, product *domain.Product) (*domain.Product, error) {
+func (p *ProductRepository) UpdateProduct(ctx context.Context, product *domain.Product) error {
 
 	p.products[product.ID] = *product
-	return product, nil
+	return  nil
 
 }
 
@@ -59,6 +59,6 @@ func (p *ProductRepository) DeleteProduct(ctx context.Context, Id string) error 
 	return nil
 }
 
-func (p *ProductRepository) BulkCreate(ctx context.Context, products *[]domain.Product) error {
+func (p *ProductRepository) BulkCreate(ctx context.Context, products []domain.Product) error {
 	return nil
 }

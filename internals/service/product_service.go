@@ -20,7 +20,15 @@ func NewProductService(productRepository ports.ProductRepository, categoryServic
 
 func (s *ProductService) CreateProduct(ctx context.Context, name string, description string, category string, price int, brand string, quantity int) (*domain.Product, error) {
 
-	product, err := domain.NewProduct(name, description, category, price, brand, quantity)
+	cat, err := s.categoryService.GetProductCategoryById(ctx, category)
+	if err != nil {
+		return nil, err
+	}
+	if cat == nil{
+		return nil , errors.New("category not found")
+	}
+
+	product, err := domain.NewProduct(name, description, cat, price, brand, quantity)
 
 	if err != nil {
 		return nil, err
@@ -29,8 +37,8 @@ func (s *ProductService) CreateProduct(ctx context.Context, name string, descrip
 	return s.repo.CreateProduct(ctx, product)
 }
 
-func (s *ProductService) GetAllProduct(ctx context.Context) ([]*domain.Product, error) {
-	return s.repo.GetAllProduct(ctx)
+func (s *ProductService) GetAllProduct(ctx context.Context , category string) ([]*domain.Product, error) {
+	return s.repo.GetAllProduct(ctx , category)
 }
 
 func (s *ProductService) GetProductById(ctx context.Context, ID string) (*domain.Product, error) {
@@ -60,11 +68,21 @@ func (s *ProductService) UpdateProduct(ctx context.Context, id string, name *str
 		return nil, errors.New("product not found")
 	}
 	copy_product := *existing_product
-	err := copy_product.UpdateProductValidation(name, description, category, price, brand, quantity)
+	var cat *domain.ProductCategory
+	if category != nil {
+		cat, _ = s.categoryService.GetProductCategoryById(ctx, *category)
+		if cat == nil {
+			return nil, errors.New("category not found")
+		}
+	}
+	err := copy_product.UpdateProductValidation(name, description, cat, price, brand, quantity)
 	if err != nil {
 		return nil, err
 	}
-	return s.repo.UpdateProduct(ctx, &copy_product)
+	if s.repo.UpdateProduct(ctx, &copy_product) != nil {
+		return nil, err
+	}
+	return &copy_product, nil
 }
 
 func (s *ProductService) BulkCreate(ctx context.Context, records [][]string) error {
@@ -79,10 +97,11 @@ func (s *ProductService) BulkCreate(ctx context.Context, records [][]string) err
 		}
 		price, _ := strconv.Atoi(row[3])
 		quantity, _ := strconv.Atoi(row[5])
+		category, _ := s.categoryService.GetProductCategoryById(ctx, row[2])
 		doc := domain.Product{
 			Name:        row[0],
 			Description: row[1],
-			Category:    row[2],
+			Category:    category,
 			Price:       price,
 			Brand:       row[4],
 			Quantity:    quantity,
@@ -90,5 +109,5 @@ func (s *ProductService) BulkCreate(ctx context.Context, records [][]string) err
 		products = append(products, doc)
 	}
 
-	return s.repo.BulkCreate(ctx, &products)
+	return s.repo.BulkCreate(ctx, products)
 }

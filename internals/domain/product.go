@@ -19,16 +19,15 @@ type Product struct {
 	ID          string `json:"_id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
-	Category    string `json:"category"`
+	Category    *ProductCategory `json:"category"`
 	Price       int    `json:"price"`
 	Brand       string `json:"brand"`
 	Quantity    int    `json:"quantity"`
 }
 
-func NewProduct(Name string, Description string, Category string, Price int, Brand string, Quantity int) (*Product, error) {
+func NewProduct(Name string, Description string, Category *ProductCategory, Price int, Brand string, Quantity int) (*Product, error) {
 	Name = strings.TrimSpace(Name)
 	Description = strings.TrimSpace(Description)
-	Category = strings.TrimSpace(Category)
 	Brand = strings.TrimSpace(Brand)
 
 	if len(Name) < 3 {
@@ -37,7 +36,7 @@ func NewProduct(Name string, Description string, Category string, Price int, Bra
 	if len(Description) < 5 {
 		return nil, ErrInvalidDescription
 	}
-	if len(Category) < 3 {
+	if Category == nil{
 		return nil, ErrInvalidCategory
 	}
 	if Price < 0 {
@@ -61,7 +60,7 @@ func NewProduct(Name string, Description string, Category string, Price int, Bra
 	}, nil
 }
 
-func (p *Product) UpdateProductValidation(name *string, description *string, category *string, price *int, brand *string, quantity *int) error {
+func (p *Product) UpdateProductValidation(name *string, description *string, category *ProductCategory, price *int, brand *string, quantity *int) error {
 
 	if name != nil {
 		*name = strings.TrimSpace(*name)
@@ -80,11 +79,7 @@ func (p *Product) UpdateProductValidation(name *string, description *string, cat
 	}
 
 	if category != nil {
-		*category = strings.TrimSpace(*category)
-		if len(*category) < 3 {
-			return ErrInvalidCategory
-		}
-		p.Category = *category
+		p.Category = category
 	}
 
 	if price != nil {

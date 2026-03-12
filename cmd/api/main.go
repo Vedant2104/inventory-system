@@ -33,7 +33,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to connect to mongodb", err)
 	}
-
+	defer client.Disconnect(ctx)
 	if err := client.Ping(ctx, nil); err != nil {
 		log.Fatal("Failed to connect to mongodb", err)
 	}
@@ -44,11 +44,10 @@ func main() {
 	categoryRepo := mongorepo.NewProductCategoryRepository(category_collection)
 	categoryService := service.NewProductCategoryService(categoryRepo)
 	categoryHandler := httprepo.NewProductCategoryHandler(categoryService)
-	
-	
+
 	// productRepo := maprepo.NewProductRepository()
 	productRepo := mongorepo.NewProductRepository(product_collection)
-	productService := service.NewProductService(productRepo , categoryService)
+	productService := service.NewProductService(productRepo, categoryService)
 	productHandler := httprepo.NewProductHandler(productService)
 
 	// router := chi.NewRouter()
