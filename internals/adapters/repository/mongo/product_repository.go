@@ -3,7 +3,6 @@ package mongorepo
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/Vedant2104/inventory-system/internals/domain"
 	"github.com/Vedant2104/inventory-system/internals/ports"
@@ -126,7 +125,6 @@ func (p *ProductRepository) GetAllProduct(ctx context.Context, category string) 
 		}
 		filter = bson.D{{Key: "category", Value: catId}}
 	}
-	fmt.Println("filter", filter)
 	// opt := options.Find().SetSort(bson.D{{Key: "name", Value: 1}})
 	pipeline := p.buildProductAggregation(filter)
 	cur, err := p.collection.Aggregate(ctx, pipeline)
