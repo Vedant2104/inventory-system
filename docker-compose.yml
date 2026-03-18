@@ -12,6 +12,14 @@ services:
     volumes:
       - mongo_data:/data/db 
 
+  mongodb-test:
+    image: mongo:latest
+    container_name: mongodb_test_container
+    ports:
+      - "27019:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
 
 volumes:
   mongo_data:
