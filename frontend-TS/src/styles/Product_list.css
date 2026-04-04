@@ -1,0 +1,45 @@
+/* Add to your existing Card.css or a new ProductList.css */
+
+.product-list {
+    align-items: center;
+    display: flex;
+    /* grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); */
+    flex-direction: column;
+    gap: 24px;
+    padding: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+.category-filter{
+    margin: 20px;
+    padding: 2px;
+    border-radius: 5px;
+    border: 1px solid black;
+    width: 200px;
+    height: 40px;
+    background-color: #ffffff;
+    color: #1a1a1a;
+}
+
+.error{
+    color: red;
+}
+
+.add-item{
+    margin: 20px;
+    padding: 2px;
+    border-radius: 5px;
+    border: 1px solid black;
+    width: 200px;
+    height: 40px;
+    background-color: #855822;;
+    color: #e5dbdb;
+    font-weight: 600;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.add-item:hover{
+    background: #e07b00;
+    color: #ffffff;
+}

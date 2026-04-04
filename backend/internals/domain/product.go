@@ -16,13 +16,13 @@ var (
 )
 
 type Product struct {
-	ID          string `json:"_id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	ID          string           `json:"id"`
+	Name        string           `json:"name"`
+	Description string           `json:"description"`
 	Category    *ProductCategory `json:"category"`
-	Price       int    `json:"price"`
-	Brand       string `json:"brand"`
-	Quantity    int    `json:"quantity"`
+	Price       int              `json:"price"`
+	Brand       string           `json:"brand"`
+	Quantity    int              `json:"quantity"`
 }
 
 func NewProduct(Name string, Description string, Category *ProductCategory, Price int, Brand string, Quantity int) (*Product, error) {
@@ -36,7 +36,7 @@ func NewProduct(Name string, Description string, Category *ProductCategory, Pric
 	if len(Description) < 5 {
 		return nil, ErrInvalidDescription
 	}
-	if Category == nil{
+	if Category == nil {
 		return nil, ErrInvalidCategory
 	}
 	if Price < 0 {

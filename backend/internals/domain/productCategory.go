@@ -6,9 +6,9 @@ import (
 )
 
 type ProductCategory struct {
-	ID          string
-	Name        string
-	Description string
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
 
 func NewProductCategory(name string, description string) (*ProductCategory, error) {

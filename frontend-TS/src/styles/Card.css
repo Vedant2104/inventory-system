@@ -1,0 +1,131 @@
+/* Card.css */
+
+.card {
+  background: #ededed;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 24px;
+  width: 280px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+}
+
+.description {
+  font-size: 0.85rem;
+  color: #777777;
+  line-height: 1.5;
+  margin: 0 0 14px 0;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* expandable section */
+.details {
+  max-height: 0;
+  /* overflow: hidden; */
+  visibility: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+}
+
+.details.expanded {
+  max-height: 200px;
+  visibility: visible;
+  opacity: 1;
+}
+
+.category {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #e07b00;
+  background: #fff4e5;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin: 0 0 12px 0;
+  position: relative;
+  cursor: default;
+}
+
+.category::after {
+  content: attr(data-tooltip);   /* reads from data-tooltip attribute */
+  position: absolute;
+  bottom: 125%;
+  left: 0;
+  background: #1a1a1a;
+  color: #ffffff;
+  font-size: 0.75rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+
+  /* hidden by default */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.category:hover::after {
+  opacity: 1;
+}
+
+.price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 10px 0;
+}
+
+.brand {
+  font-size: 0.8rem;
+  color: #999999;
+  text-transform: uppercase;
+  margin: 0 0 8px 0;
+}
+
+.quantity {
+  font-size: 0.8rem;
+  color: #999999;
+  margin: 0 0 14px 0;
+}
+
+/* button */
+.read-more ,.view-product ,.view-category{
+  width: 100%;
+  padding: 8px 0;
+  margin-top: 12px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #555555;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.read-more:hover ,.view-category:hover  {
+  background: #e07b00;
+  color: #ffffff;
+  border-color: #e07b00;
+}
+
+.view-product:hover{
+  background: #540513;
+  color: #ffffff;
+  border-color: #540513;
+}
