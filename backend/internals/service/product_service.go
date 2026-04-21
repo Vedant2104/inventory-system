@@ -24,8 +24,8 @@ func (s *ProductService) CreateProduct(ctx context.Context, name string, descrip
 	if err != nil {
 		return nil, err
 	}
-	if cat == nil{
-		return nil , errors.New("category not found")
+	if cat == nil {
+		return nil, errors.New("category not found")
 	}
 
 	product, err := domain.NewProduct(name, description, cat, price, brand, quantity)
@@ -37,8 +37,8 @@ func (s *ProductService) CreateProduct(ctx context.Context, name string, descrip
 	return s.repo.CreateProduct(ctx, product)
 }
 
-func (s *ProductService) GetAllProduct(ctx context.Context , category string) ([]*domain.Product, error) {
-	return s.repo.GetAllProduct(ctx , category)
+func (s *ProductService) GetAllProduct(ctx context.Context, category string) ([]*domain.Product, error) {
+	return s.repo.GetAllProduct(ctx, category)
 }
 
 func (s *ProductService) GetProductById(ctx context.Context, ID string) (*domain.Product, error) {
@@ -110,4 +110,25 @@ func (s *ProductService) BulkCreate(ctx context.Context, records [][]string) err
 	}
 
 	return s.repo.BulkCreate(ctx, products)
+}
+
+func (s *ProductService) ReportLowStockedProducts(ctx context.Context, threshold int) ([]*domain.LowStockProducts, error) {
+	if threshold < 0 {
+		return nil, errors.New("threshold cannot be negative")
+	}
+	return s.repo.ReportLowStockedProducts(ctx, threshold)
+}
+
+func (s *ProductService) ReportProductCountByCategory(ctx context.Context, minValue int, maxValue int) ([]domain.ProductCountByCategory, error) {
+	if minValue < 0 || maxValue < 0 {
+		return nil, errors.New("minValue and maxValue cannot be negative")
+	}
+	if minValue > maxValue {
+		return nil, errors.New("minValue cannot be greater than maxValue")
+	}
+	return s.repo.ReportProductCountByCategory(ctx, minValue, maxValue)
+}
+
+func (s *ProductService) ReportPriceSegmentation(ctx context.Context) ([]domain.PriceSegmentation, error) {
+	return s.repo.ReportPriceSegmentation(ctx)
 }

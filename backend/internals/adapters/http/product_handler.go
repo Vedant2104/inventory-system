@@ -5,6 +5,7 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/Vedant2104/inventory-system/internals/service"
@@ -156,4 +157,65 @@ func (h *ProductHandler) BulkCreateFromCSV(w http.ResponseWriter, r *http.Reques
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode("Products created successfully")
+}
+
+func (h *ProductHandler) ReportLowStockedProduct(w http.ResponseWriter, r *http.Request) {
+	ctx, cancel := context.WithTimeout((r.Context()), 5*time.Second)
+	defer cancel()
+
+	threshold := r.URL.Query().Get("threshold")
+	// log.Println(threshold)
+	thresholdInt, err := strconv.Atoi(threshold)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	products, err := h.service.ReportLowStockedProducts(ctx, thresholdInt)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(products)
+}
+
+func (h *ProductHandler) ReportProductCountByCategory(w http.ResponseWriter, r *http.Request) {
+	ctx, cancel := context.WithTimeout((r.Context()), 5*time.Second)
+	defer cancel()
+
+	minValue := r.URL.Query().Get("minValue")
+	maxValue := r.URL.Query().Get("maxValue")
+	minValueInt, err := strconv.Atoi(minValue)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	maxValueInt, err := strconv.Atoi(maxValue)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	products, err := h.service.ReportProductCountByCategory(ctx, minValueInt, maxValueInt)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(products)
+}
+
+func (h *ProductHandler) ReportPriceSegmentation(w http.ResponseWriter, r *http.Request) {
+	ctx, cancel := context.WithTimeout((r.Context()), 5*time.Second)
+	defer cancel()
+
+	results, err := h.service.ReportPriceSegmentation(ctx)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(results)
 }

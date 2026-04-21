@@ -13,7 +13,9 @@ function Navbar() {
         <Link to="/category" className="nav-item">
           Categories
         </Link>
-       
+        <Link to="/reports" className="nav-item">
+          Reports
+          </Link>
       </div>
     </div>
   );

@@ -27,7 +27,7 @@ func (p *ProductRepository) CreateProduct(ctx context.Context, product *domain.P
 	return product, nil
 }
 
-func (p *ProductRepository) GetAllProduct(ctx context.Context ,category string) ([]*domain.Product, error) {
+func (p *ProductRepository) GetAllProduct(ctx context.Context, category string) ([]*domain.Product, error) {
 	products := []*domain.Product{}
 
 	for _, product := range p.products {
@@ -49,7 +49,7 @@ func (p *ProductRepository) GetProductById(ctx context.Context, Id string) (*dom
 func (p *ProductRepository) UpdateProduct(ctx context.Context, product *domain.Product) error {
 
 	p.products[product.ID] = *product
-	return  nil
+	return nil
 
 }
 
@@ -61,4 +61,16 @@ func (p *ProductRepository) DeleteProduct(ctx context.Context, Id string) error 
 
 func (p *ProductRepository) BulkCreate(ctx context.Context, products []domain.Product) error {
 	return nil
+}
+
+func (p *ProductRepository) ReportLowStockedProducts(ctx context.Context, threshold int) ([]*domain.LowStockProducts, error) {
+	return nil, nil
+}
+
+func (p *ProductRepository) ReportProductCountByCategory(ctx context.Context, minValue int, maxValue int) ([]domain.ProductCountByCategory, error) {
+	return nil, nil
+}
+
+func (p *ProductRepository) ReportPriceSegmentation(ctx context.Context) ([]domain.PriceSegmentation, error) {
+	return nil, nil
 }

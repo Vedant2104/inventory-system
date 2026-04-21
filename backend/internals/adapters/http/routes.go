@@ -12,7 +12,10 @@ func RegisterProductHandler(mux *http.ServeMux, handler *ProductHandler) {
 	mux.HandleFunc("PATCH /product/{id}", handler.UpdateProduct)
 	mux.HandleFunc("DELETE /product/{id}", handler.DeleteProduct)
 	mux.HandleFunc("POST /product/bulk", handler.BulkCreateFromCSV)
-	
+	mux.HandleFunc("GET /product/report/lowstock", handler.ReportLowStockedProduct)
+	mux.HandleFunc("GET /product/report/countbycategory", handler.ReportProductCountByCategory)
+	mux.HandleFunc("GET /product/report/pricesegmentation", handler.ReportPriceSegmentation)
+
 }
 
 func RegisterProductCategoryHandler(mux *http.ServeMux, handler *ProductCategoryHandler) {

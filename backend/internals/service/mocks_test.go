@@ -42,6 +42,16 @@ func (m *mockProductRepository) BulkCreate(ctx context.Context, products []domai
 	return nil
 }
 
+func (m *mockProductRepository) ReportLowStockedProducts(ctx context.Context, threshold int) ([]*domain.LowStockProducts, error) {
+	return nil, nil
+}
+func (m *mockProductRepository) ReportProductCountByCategory(ctx context.Context, minValue int, maxValue int) ([]domain.ProductCountByCategory, error) {
+	return nil, nil
+}
+func (m *mockProductRepository) ReportPriceSegmentation(ctx context.Context) ([]domain.PriceSegmentation, error) {
+	return nil, nil
+}
+
 type mockProductCategoryRepository struct {
 	GetProductCategoryByIdFn func(ctx context.Context, ID string) (*domain.ProductCategory, error)
 	GetAllProductCategoryFn  func(ctx context.Context) ([]*domain.ProductCategory, error)
