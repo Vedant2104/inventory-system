@@ -1,9 +1,9 @@
 # inventory-system
 
-*To run backend:* \n
+*To run backend:*
 cd backend
 docker-compose up -d
-go run ./cmd/api/
+go run ./cmd/api
 
 *To run frontend:*
 cd frontend-TS
